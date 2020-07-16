@@ -1,4 +1,5 @@
 import webbrowser
+from urllib.parse import quote
 
 import click
 import uvicorn
@@ -11,7 +12,7 @@ def version():
     # with open("pyproject.toml") as f:
     #     ret = re.findall(r'version = "(\d+\.\d+\.\d+)"', f.read())
     #     return ret[0]
-    return "0.1.0"
+    return "0.1.1"
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]})
@@ -39,7 +40,7 @@ def serve(host, port: int):
     show_default=True,
 )
 def watch(server: str, url: str, youtube_dl: bool):
-    video_url = f"{server}?url={url}&ydl={1 if youtube_dl else 0}"
+    video_url = f"{server}?url={quote(url)}&ydl={1 if youtube_dl else 0}"
     webbrowser.open(video_url)
 
 

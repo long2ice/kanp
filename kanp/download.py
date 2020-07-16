@@ -3,13 +3,24 @@ import io
 
 import httpx
 
+from kanp.utils import get_video_info
+
 
 class Downloader:
     client = httpx.AsyncClient(trust_env=True)
     range_size = 1024 * 1024
     block_size = range_size * 5
+    _headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.140 Safari/537.36",
+        "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.7",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Encoding": "gzip, deflate",
+        "Accept-Language": "en-us,en;q=0.5",
+    }
 
-    def __init__(self, url: str):
+    def __init__(self, url: str, start_range: int = 0, content_length: int = None):
+        self.start_range = start_range
+        self.content_length = content_length
         self.url = url
         self.blocks = asyncio.PriorityQueue()
 
@@ -55,13 +66,12 @@ class Downloader:
             block_buffer.write(buffer.getvalue())
         await self.blocks.put((start_range, block_buffer.getvalue()))
 
-    async def download(self):
-        async with self.client.stream("GET", self.url,) as response:
-            headers = response.headers
-            content_length = int(headers.get("content-length"))
-        last_range = 0
-        for i in range(0, content_length, self.block_size):
-            if 0 < i != last_range:
+    async def download(self,):
+        if not self.content_length:
+            self.content_length, _ = await get_video_info(self.url)
+        last_range = self.start_range
+        for i in range(self.start_range, self.content_length, self.block_size):
+            if self.start_range < i != last_range:
                 await self._download_block(last_range, i)
                 last_range = i + 1
-        await self._download_block(last_range, content_length)
+        await self._download_block(last_range, self.content_length)
