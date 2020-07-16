@@ -1,24 +1,37 @@
 [tool.poetry]
-name = "kanp"
-version = "0.1.0"
-description = "See video by download."
 authors = ["long2ice <long2ice@gmail.com>"]
+description = "See video with downloading by multithread"
+documentation = "https://github.com/long2ice/kanp"
+homepage = "https://github.com/long2ice/kanp"
+include = ["CHANGELOG.md", "LICENSE", "README.md", "pyproject.toml"]
 license = "Apache-2.0"
+name = "kanp"
+packages = [
+  {include = "kanp"},
+]
+readme = "README.md"
+repository = "https://github.com/long2ice/kanp.git"
+version = "0.1.0"
 
 [tool.poetry.dependencies]
-python = "^3.7"
-youtube_dl = "*"
+fastapi = "*"
 httpx = "*"
+python = "^3.7"
+uvicorn = "*"
+youtube_dl = "*"
 
 [tool.poetry.dev-dependencies]
+aiofiles = "*"
 bandit = "*"
 black = "^19.10b0"
 flake8 = "*"
 isort = "*"
 pytest = "*"
 pytest-asyncio = "*"
-aiofiles = "*"
 
 [build-system]
-requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+requires = ["poetry>=0.12"]
+
+[tool.poetry.scripts]
+kanp = "kanp.cli:cli"

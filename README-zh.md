@@ -6,19 +6,19 @@
 ![workflows](https://github.com/long2ice/kanp/workflows/pypi/badge.svg)
 ![workflows](https://github.com/long2ice/kanp/workflows/ci/badge.svg)
 
-[中文文档](https://github.com/long2ice/kanp/blob/dev/README-zh.md)
+[English](https://github.com/long2ice/kanp/blob/dev/README.md)
 
-## Introduction
+## 简介
 
-See video with downloading by multithread.
+使用多线程边下边看。
 
-## Install
+## 安装
 
 ```shell
 > pip install kanp
 ```
 
-## Usage
+## 使用
 
 ```shell script
 Usage: kanp [OPTIONS] COMMAND [ARGS]...
@@ -32,7 +32,7 @@ Commands:
   watch  Open video server url with webbrowser.
 ```
 
-### Serve video server
+### 启动服务器
 
 ```shell script
 Usage: kanp serve [OPTIONS]
@@ -50,13 +50,13 @@ Options:
 > kanp serve
 ```
 
-Or run with docker:
+或使用 docker 启动：
 
 ```shell script
 > docker run -d -p 8000:8000 long2ice/kanp
 ```
 
-And you will see:
+你将会看到：
 
 ```log
 INFO:     Started server process [41254]
@@ -69,7 +69,7 @@ INFO:     Application shutdown complete.
 INFO:     Finished server process [41254]
 ```
 
-### Watch video by web browser
+### 使用浏览器观看
 
 ```shell script
 Usage: kanp watch [OPTIONS]
@@ -87,10 +87,10 @@ Options:
 > kanp watch -u 'https://www.youtube.com/watch?v=WLVuUTUbhkw' -y
 ```
 
-Will open browser automatically and play video.
+将会打开浏览器自动播放。
 
-Just enjoy it with huge speed!
+享受流畅的观看体验吧！
 
 ## License
 
-This project is licensed under the [Apache-2.0](https://github.com/long2ice/kanp/blob/master/LICENSE) License.
+本项目遵从 [Apache-2.0](https://github.com/long2ice/kanp/blob/master/LICENSE) 开源许可。
