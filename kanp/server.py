@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from starlette.requests import Request
-from starlette.responses import StreamingResponse
+from starlette.responses import Response, StreamingResponse
 
 from kanp.download import Downloader
 from kanp.utils import get_real_download_url, get_video_info
@@ -14,15 +14,14 @@ async def video_stream(url: str, range_: int, content_length: int):
             yield block
 
 
-@app.get("/")
-async def get_video_stream(
-    request: Request, url: str, ydl: int = 0,
-):
+@app.route("/", methods=["GET", "HEAD"])
+async def get_video_stream(request: Request):
     range_ = request.headers.get("Range")
+    ydl = request.query_params.get("ydl") or 0
+    url = request.query_params.get("url")
     if ydl:
         url = get_real_download_url(url)
     content_length, content_type = await get_video_info(url)
-    print(content_length)
     if not range_:
         start_range = 0
         status_code = 200
@@ -38,8 +37,11 @@ async def get_video_stream(
             "Content-Type": content_type,
             "Content-Range": f"bytes {start_range}-{content_length - 1}/{content_length}",
         }
-    return StreamingResponse(
-        status_code=status_code,
-        content=video_stream(url, start_range, content_length),
-        headers=headers,
-    )
+    if request.method == "GET":
+        return StreamingResponse(
+            status_code=status_code,
+            content=video_stream(url, start_range, content_length),
+            headers=headers,
+        )
+    elif request.method == "HEAD":
+        return Response(status_code=status_code, headers=headers,)

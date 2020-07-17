@@ -1,4 +1,3 @@
-import webbrowser
 from urllib.parse import quote
 
 import click
@@ -41,7 +40,7 @@ def serve(host, port: int):
 )
 def watch(server: str, url: str, youtube_dl: bool):
     video_url = f"{server}?url={quote(url)}&ydl={1 if youtube_dl else 0}"
-    webbrowser.open(video_url)
+    print(f"Open by player or browser: {video_url}")
 
 
 if __name__ == "__main__":
